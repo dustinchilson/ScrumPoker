@@ -1,0 +1,38 @@
+﻿@using ScrumPokerTool.Client.Services
+@inherits LayoutComponentBase
+@inject EditProfileModalService EditProfileModal
+@inject ProfileService ProfileSvc
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main">
+    <div class="top-row px-4">
+        <button class="btn btn-primary" @onclick="EditProfile">Edit Profile</button>
+    </div>
+
+    <div class="content px-4">
+        @Body
+    </div>
+</div>
+
+<BlazoredModal />
+
+@code {
+
+    async Task EditProfile()
+    {
+        await EditProfileModal.ShowAsync();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        ProfileSvc.Load();
+
+        if (ProfileSvc.IsDirty)
+            ProfileSvc.Save();
+
+        return Task.CompletedTask;
+    }
+}

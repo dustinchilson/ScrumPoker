@@ -1,0 +1,43 @@
+﻿@page "/story-poker"
+@page "/story-poker/{GameId}"
+
+<h1>Story Poker</h1>
+
+<p>Game Id: @GameId</p>
+<p>Is Connected: @StoryPokerHub.IsConnected</p>
+<button class="btn btn-danger .btn-lg" @onclick='ExitGame'>@exitGameTxt Game</button>
+<button class="btn btn-warning .btn-lg" @onclick='ResetGame' disabled="@(userId != gameOwner)">Reset Votes</button>
+
+@foreach (var opt in storyPointOptions)
+{
+    <button class="btn @opt.ButtonClass" @onclick='() => SubmitVoteAsync(storyPointOptions.IndexOf(opt), opt.Option)' disabled="@voteComplete">@opt.Option</button>
+}
+
+<Divider />
+
+<Table Bordered="true" Narrow="true" Striped="true">
+    <TableHeader ThemeContrast="ThemeContrast.Dark">
+        <TableRow>
+            @*<TableHeaderCell>User Id</TableHeaderCell>*@
+            <TableHeaderCell>User Name</TableHeaderCell>
+            <TableHeaderCell>Vote</TableHeaderCell>
+        </TableRow>
+    </TableHeader>
+    <TableBody>
+        @foreach (var player in players)
+        {
+            <TableRow>
+                @*<TableRowCell>@player.Id</TableRowCell>*@
+                <TableRowCell>@player.UserName</TableRowCell>
+                @if (voteComplete)
+                {
+                    <TableRowCell>@player.Vote</TableRowCell>
+                }
+                else
+                {
+                    <TableRowCell>@(player.Vote != null ?  "✔️" :  "❌")</TableRowCell>
+                }
+            </TableRow>
+        }
+    </TableBody>
+</Table>

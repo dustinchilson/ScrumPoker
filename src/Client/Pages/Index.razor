@@ -1,0 +1,14 @@
+﻿@page "/"
+@using ScrumPokerTool.Shared
+@inject NavigationManager NavigationManager
+
+<h1>Welcome to StoryPoker!</h1>
+
+<button class="btn btn-primary" @onclick="CreateGame">Start a Game</button>
+
+@code {
+    private void CreateGame()
+    {
+        NavigationManager.NavigateTo($"story-poker/{GameHelper.GenerateGameId()}");
+    }
+}

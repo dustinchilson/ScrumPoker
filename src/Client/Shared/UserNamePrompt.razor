@@ -1,0 +1,40 @@
+﻿@using ScrumPokerTool.Client.Services
+
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject ProfileService ProfileSvc
+
+<div class="simple-form">
+
+    <div class="form-group">
+        <label for="user-name">User Name</label>
+        <input @bind="@UserName" type="text" class="form-control" id="user-name" />
+    </div>
+
+    <button @onclick="SaveUserNameAsync" class="btn btn-primary">Submit</button>
+</div>
+
+@code {
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
+
+    private string UserName { get; set; }
+
+    private Task SaveUserNameAsync()
+    {
+        if (string.IsNullOrWhiteSpace(UserName))
+            return Task.CompletedTask;
+        
+        ProfileSvc.UserName = UserName;
+        ProfileSvc.Save();
+        BlazoredModal.Close(ModalResult.Ok(UserName, typeof(string)));
+
+        return Task.CompletedTask;
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        UserName = ProfileSvc.UserName ?? String.Empty;
+
+        return Task.CompletedTask;
+    }
+
+}

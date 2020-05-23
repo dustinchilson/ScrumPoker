@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrum-poker-server
+  labels:
+    role: server
+spec:
+  selector:
+    matchLabels:
+      role: server
+  template:
+    metadata:
+      labels:
+        role: server
+    spec:
+      containers:
+        - name: server
+          image: scrum-poker
+          ports:
+            - containerPort: 80

@@ -1,0 +1,15 @@
+﻿<div class="simple-form">
+
+    <p>The game has ended.</p>
+
+    <button @onclick="Ok" class="btn btn-primary">OK</button>
+</div>
+
+@code {
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
+
+    private void Ok()
+    {
+        BlazoredModal.Close();
+    }
+}
