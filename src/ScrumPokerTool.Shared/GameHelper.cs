@@ -8,7 +8,10 @@ namespace ScrumPokerTool.Shared
     {
         public static string GenerateGameId()
         {
-            return Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8).ToLower();
+            return Convert.ToBase64String(Guid.NewGuid().ToByteArray())
+                .Replace("/", String.Empty)
+                .Substring(0, 8)
+                .ToLower();
         }
     }
 }

@@ -13,7 +13,7 @@ using ScrumPokerTool.Shared;
 
 namespace ScrumPokerTool.Client.Pages
 {
-    public partial class StoryPoker
+    public partial class StoryPoker : IAsyncDisposable
     {
         [Inject] 
         protected NavigationManager NavigationManager { get; set; }
@@ -195,6 +195,12 @@ namespace ScrumPokerTool.Client.Pages
                 voteComplete = true;
 
             StateHasChanged();
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            await StoryPokerHub.LeaveGameAsync()
+                .ContinueWith(t => StoryPokerHub.StopAsync());
         }
     }
 }
