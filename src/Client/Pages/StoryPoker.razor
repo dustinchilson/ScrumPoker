@@ -6,7 +6,7 @@
 <p>Game Id: @GameId</p>
 <p>Is Connected: @StoryPokerHub.IsConnected</p>
 <button class="btn btn-danger .btn-lg" @onclick='ExitGame'>@exitGameTxt Game</button>
-<button class="btn btn-warning .btn-lg" @onclick='ResetGame' disabled="@(userId != gameOwner)">Reset Votes</button>
+<button class="btn btn-warning .btn-lg" @onclick='ResetGame' hidden="@(userId != gameOwner)">New Vote</button>
 
 @foreach (var opt in storyPointOptions)
 {

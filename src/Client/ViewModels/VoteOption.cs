@@ -4,6 +4,6 @@
     {
         public string Option { get; set; }
 
-        public string ButtonClass { get; set; }
+        public string ButtonClass { get; set; } = "btn-primary";
     }
 }

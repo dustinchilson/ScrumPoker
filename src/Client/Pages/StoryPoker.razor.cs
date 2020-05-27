@@ -44,13 +44,15 @@ namespace ScrumPokerTool.Client.Pages
 
         protected readonly List<VoteOption> storyPointOptions = new List<VoteOption>()
         {
-            new VoteOption() {Option = "1", ButtonClass = "btn-primary"},
-            new VoteOption() {Option = "2", ButtonClass = "btn-primary"},
-            new VoteOption() {Option = "3", ButtonClass = "btn-primary"},
-            new VoteOption() {Option = "5", ButtonClass = "btn-primary"},
-            new VoteOption() {Option = "8", ButtonClass = "btn-primary"},
-            new VoteOption() {Option = "13", ButtonClass = "btn-primary"},
-            new VoteOption() {Option = "21", ButtonClass = "btn-primary"}
+            new VoteOption() {Option = ".5" },
+            new VoteOption() {Option = "1" },
+            new VoteOption() {Option = "2" },
+            new VoteOption() {Option = "3" },
+            new VoteOption() {Option = "5" },
+            new VoteOption() {Option = "8" },
+            new VoteOption() {Option = "13" },
+            new VoteOption() {Option = "21" },
+            new VoteOption() {Option = "🤷" }
         };
 
         protected readonly List<Player> players = new List<Player>();
