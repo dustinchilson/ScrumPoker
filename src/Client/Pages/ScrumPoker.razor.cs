@@ -68,16 +68,7 @@ namespace ScrumPokerTool.Client.Pages
 
             await StoryPokerHub.ResetGameAsync();
         }
-
-        //protected async Task SubmitVoteAsync(int buttonId, string vote)
-        //{
-        //    if (string.IsNullOrWhiteSpace(GameId))
-        //        return;
-
-        //    Logger.LogDebug($"Vote Cast: Me {vote}");
-        //    await StoryPokerHub.VoteAsync(vote);
-        //}
-
+        
         protected override async Task OnInitializedAsync()
         {
             userName = ProfileSvc.UserName;
@@ -115,12 +106,20 @@ namespace ScrumPokerTool.Client.Pages
         protected async void GameReset(object sender, PlayerEvent e)
         {
             players.ForEach(p => p.Vote = null);
+            voteComplete = false;
             StateHasChanged();
 
-            var voteModal = Modal.Show<VotingModal>("Cast your vote!");
+            var options = new ModalOptions()
+            {
+                HideCloseButton = true,
+                DisableBackgroundCancel = true
+            };
+
+            var voteModal = Modal.Show<VotingModal>("Cast your vote!", options);
             var modalResult = await voteModal.Result;
 
-            await StoryPokerHub.VoteAsync((string)modalResult.Data);   
+            await StoryPokerHub.VoteAsync((string)modalResult.Data);
+            StateHasChanged();
         }
 
         protected void ReceivedInitialGameState(object sender, GameInfo e)
@@ -142,7 +141,7 @@ namespace ScrumPokerTool.Client.Pages
         {
             var options = new ModalOptions()
             {
-                HideCloseButton = false,
+                HideCloseButton = true,
                 DisableBackgroundCancel = true
             };
 
