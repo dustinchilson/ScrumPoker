@@ -42,7 +42,7 @@ namespace ScrumPokerTool.Client.Pages
         protected string gameOwner;
         protected bool voteComplete = false;
 
-        protected string gameModeTxt = "Become Observer";
+        protected string gameModeTxt = "Observe";
         protected bool observing = false;
 
         protected readonly List<Player> players = new List<Player>();
@@ -72,9 +72,9 @@ namespace ScrumPokerTool.Client.Pages
             observing = !observing;
 
             if (observing)
-                gameModeTxt = "Become Player";
+                gameModeTxt = "Play";
             else
-                gameModeTxt = "Become Observer";
+                gameModeTxt = "Observe";
 
             return Task.CompletedTask;
         }

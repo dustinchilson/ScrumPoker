@@ -3,9 +3,9 @@
 
 <h1>Scrum Poker</h1>
 
-<button class="btn btn-danger .btn-lg" @onclick='ExitGame'>@exitGameTxt Game</button>
-<button class="btn btn-info .btn-lg" @onclick='ChangeGameMode'>@gameModeTxt</button>
-<button class="btn btn-warning .btn-lg" @onclick='ResetGame' hidden="@(userId != gameOwner)">New Vote</button>
+<button class="btn btn-danger btn-sm" @onclick='ExitGame'>@exitGameTxt Game</button>
+<button class="btn btn-info btn-sm" @onclick='ChangeGameMode'>@gameModeTxt</button>
+<button class="btn btn-warning btn-sm" @onclick='ResetGame' hidden="@(userId != gameOwner)">New Vote</button>
 
 <Divider />
 
