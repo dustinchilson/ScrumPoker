@@ -1,0 +1,4 @@
+﻿@foreach (var opt in storyPointOptions)
+{
+    <button class="btn btn-primary" @onclick='() => SubmitVoteAsync(opt)'>@opt</button>
+}

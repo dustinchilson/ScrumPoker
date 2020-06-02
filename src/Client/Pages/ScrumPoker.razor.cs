@@ -13,7 +13,7 @@ using ScrumPokerTool.Shared;
 
 namespace ScrumPokerTool.Client.Pages
 {
-    public partial class StoryPoker : IAsyncDisposable
+    public partial class ScrumPoker : IAsyncDisposable
     {
         [Inject] 
         protected NavigationManager NavigationManager { get; set; }
@@ -28,7 +28,7 @@ namespace ScrumPokerTool.Client.Pages
         protected StoryPokerHubClient StoryPokerHub { get; set; }
 
         [Inject]
-        protected ILogger<StoryPoker> Logger { get; set; }
+        protected ILogger<ScrumPoker> Logger { get; set; }
 
         [Inject]
         protected IModalService Modal { get; set; }
@@ -41,19 +41,6 @@ namespace ScrumPokerTool.Client.Pages
         protected string userId;
         protected string gameOwner;
         protected bool voteComplete = false;
-
-        protected readonly List<VoteOption> storyPointOptions = new List<VoteOption>()
-        {
-            new VoteOption() {Option = ".5" },
-            new VoteOption() {Option = "1" },
-            new VoteOption() {Option = "2" },
-            new VoteOption() {Option = "3" },
-            new VoteOption() {Option = "5" },
-            new VoteOption() {Option = "8" },
-            new VoteOption() {Option = "13" },
-            new VoteOption() {Option = "21" },
-            new VoteOption() {Option = "🤷" }
-        };
 
         protected readonly List<Player> players = new List<Player>();
 
@@ -82,23 +69,17 @@ namespace ScrumPokerTool.Client.Pages
             await StoryPokerHub.ResetGameAsync();
         }
 
-        protected async Task SubmitVoteAsync(int buttonId, string vote)
-        {
-            if (string.IsNullOrWhiteSpace(GameId))
-                return;
+        //protected async Task SubmitVoteAsync(int buttonId, string vote)
+        //{
+        //    if (string.IsNullOrWhiteSpace(GameId))
+        //        return;
 
-            Logger.LogDebug($"Vote Cast: Me {vote}");
-
-            storyPointOptions.ForEach(o => o.ButtonClass = "btn-primary");
-            storyPointOptions[buttonId].ButtonClass = "btn-success";
-
-            await StoryPokerHub.VoteAsync(vote);
-        }
+        //    Logger.LogDebug($"Vote Cast: Me {vote}");
+        //    await StoryPokerHub.VoteAsync(vote);
+        //}
 
         protected override async Task OnInitializedAsync()
         {
-            storyPointOptions.ForEach(o => o.ButtonClass = "btn-primary");
-
             userName = ProfileSvc.UserName;
             userId = ProfileSvc.UserId;
 
@@ -131,12 +112,15 @@ namespace ScrumPokerTool.Client.Pages
             await StoryPokerHub.JoinGameAsync();
         }
 
-        protected void GameReset(object sender, PlayerEvent e)
+        protected async void GameReset(object sender, PlayerEvent e)
         {
             players.ForEach(p => p.Vote = null);
-            voteComplete = false;
-            storyPointOptions.ForEach(o => o.ButtonClass = "btn-primary");
             StateHasChanged();
+
+            var voteModal = Modal.Show<VotingModal>("Cast your vote!");
+            var modalResult = await voteModal.Result;
+
+            await StoryPokerHub.VoteAsync((string)modalResult.Data);   
         }
 
         protected void ReceivedInitialGameState(object sender, GameInfo e)
