@@ -7,13 +7,13 @@ using ScrumPokerTool.Shared;
 
 namespace ScrumPokerTool.Server.Hubs
 {
-    public class StoryPokerHub : Hub
+    public class ScrumPokerHub : Hub
     {
         private static readonly Dictionary<string, List<string>> ConnectionGameTracker = new Dictionary<string, List<string>>();
         
         private readonly GameTracker _gameTracker;
 
-        public StoryPokerHub(GameTracker gameTracker)
+        public ScrumPokerHub(GameTracker gameTracker)
         {
             _gameTracker = gameTracker;
         }

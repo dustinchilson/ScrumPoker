@@ -51,7 +51,7 @@ namespace ScrumPokerTool.Client
             builder.Services.AddBlazoredModal();
 
             builder.Services.AddTransient<EditProfileModalService>();
-            builder.Services.AddSingleton<StoryPokerHubClient>();
+            builder.Services.AddSingleton<ScrumPokerHubClient>();
 
             var host = builder.Build();
 

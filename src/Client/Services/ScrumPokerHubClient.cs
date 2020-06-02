@@ -13,20 +13,20 @@ using ScrumPokerTool.Shared;
 
 namespace ScrumPokerTool.Client.Services
 {
-    public class StoryPokerHubClient
+    public class ScrumPokerHubClient
     {
-        private readonly ILogger<StoryPokerHubClient> _logger;
+        private readonly ILogger<ScrumPokerHubClient> _logger;
         private readonly ProfileService _profileService;
         private HubConnection _hubConnection;
         private string _gameId;
 
-        public StoryPokerHubClient(ILogger<StoryPokerHubClient> logger, IJSRuntime jsRuntime, NavigationManager navigationManager, ProfileService profileService)
+        public ScrumPokerHubClient(ILogger<ScrumPokerHubClient> logger, IJSRuntime jsRuntime, NavigationManager navigationManager, ProfileService profileService)
         {
             _logger = logger;
             _profileService = profileService;
 
             _hubConnection = new HubConnectionBuilder()
-                .WithUrl(navigationManager.ToAbsoluteUri($"/{SignalRConstants.StoryPokerHub}"))
+                .WithUrl(navigationManager.ToAbsoluteUri($"/{SignalRConstants.ScrumPokerHub}"))
                 .WithAutomaticReconnect()
                 .ConfigureLogging(builder =>
                 {

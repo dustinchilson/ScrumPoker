@@ -2,7 +2,7 @@
 {
     public static class SignalRConstants
     {
-        public static string StoryPokerHub = "hubs/storypoker";
+        public static string ScrumPokerHub = "hubs/scrumpoker";
 
         public static string JoinGame = "JoinGame";
         public static string LeaveGame = "LeaveGame";

@@ -61,7 +61,7 @@ namespace ScrumPokerTool.Server
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
-                endpoints.MapHub<StoryPokerHub>($"/{SignalRConstants.StoryPokerHub}", options =>
+                endpoints.MapHub<ScrumPokerHub>($"/{SignalRConstants.ScrumPokerHub}", options =>
                 {
                     options.WebSockets.CloseTimeout = TimeSpan.FromDays(3);
                 });

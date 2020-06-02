@@ -25,7 +25,7 @@ namespace ScrumPokerTool.Client.Pages
         protected ProfileService ProfileSvc { get; set; }
 
         [Inject]
-        protected StoryPokerHubClient StoryPokerHub { get; set; }
+        protected ScrumPokerHubClient ScrumPokerHub { get; set; }
 
         [Inject]
         protected ILogger<ScrumPoker> Logger { get; set; }
@@ -42,6 +42,9 @@ namespace ScrumPokerTool.Client.Pages
         protected string gameOwner;
         protected bool voteComplete = false;
 
+        protected string gameModeTxt = "Become Observer";
+        protected bool observing = false;
+
         protected readonly List<Player> players = new List<Player>();
 
         protected Task ExitGame()
@@ -51,10 +54,27 @@ namespace ScrumPokerTool.Client.Pages
 
             Logger.LogDebug("Game Ended!");
 
-            StoryPokerHub.LeaveGameAsync()
-                .ContinueWith(t => StoryPokerHub.StopAsync());
+            ScrumPokerHub.LeaveGameAsync()
+                .ContinueWith(t => ScrumPokerHub.StopAsync());
 
             NavigationManager.NavigateTo($"/");
+
+            return Task.CompletedTask;
+        }
+
+        protected Task ChangeGameMode()
+        {
+            if (string.IsNullOrWhiteSpace(GameId))
+                return Task.CompletedTask;
+
+            Logger.LogDebug("Switched My Game mode!");
+
+            observing = !observing;
+
+            if (observing)
+                gameModeTxt = "Become Player";
+            else
+                gameModeTxt = "Become Observer";
 
             return Task.CompletedTask;
         }
@@ -66,7 +86,7 @@ namespace ScrumPokerTool.Client.Pages
 
             Logger.LogDebug("Game Reset!");
 
-            await StoryPokerHub.ResetGameAsync();
+            await ScrumPokerHub.ResetGameAsync();
         }
         
         protected override async Task OnInitializedAsync()
@@ -82,25 +102,25 @@ namespace ScrumPokerTool.Client.Pages
 
             if (!string.IsNullOrWhiteSpace(GameId))
             {
-                StoryPokerHub.Init(GameId);
+                ScrumPokerHub.Init(GameId);
 
-                StoryPokerHub.OnReconnected += Reconnected;
-                StoryPokerHub.OnReceiveVote += ReceivedVote;
-                StoryPokerHub.OnAddPlayer += NewPlayerAdded;
-                StoryPokerHub.OnRemovePlayer += RemovePlayer;
-                StoryPokerHub.OnReceiveInitialGameState += ReceivedInitialGameState;
-                StoryPokerHub.OnGameEnded += GameEnded;
-                StoryPokerHub.OnGameReset += GameReset;
+                ScrumPokerHub.OnReconnected += Reconnected;
+                ScrumPokerHub.OnReceiveVote += ReceivedVote;
+                ScrumPokerHub.OnAddPlayer += NewPlayerAdded;
+                ScrumPokerHub.OnRemovePlayer += RemovePlayer;
+                ScrumPokerHub.OnReceiveInitialGameState += ReceivedInitialGameState;
+                ScrumPokerHub.OnGameEnded += GameEnded;
+                ScrumPokerHub.OnGameReset += GameReset;
 
-                await StoryPokerHub.StartAsync();
+                await ScrumPokerHub.StartAsync();
 
-                await StoryPokerHub.JoinGameAsync();
+                await ScrumPokerHub.JoinGameAsync();
             }
         }
 
         protected async void Reconnected(object sender, string connectionId)
         {
-            await StoryPokerHub.JoinGameAsync();
+            await ScrumPokerHub.JoinGameAsync();
         }
 
         protected async void GameReset(object sender, PlayerEvent e)
@@ -109,16 +129,24 @@ namespace ScrumPokerTool.Client.Pages
             voteComplete = false;
             StateHasChanged();
 
-            var options = new ModalOptions()
+            if (!observing)
             {
-                HideCloseButton = true,
-                DisableBackgroundCancel = true
-            };
+                var options = new ModalOptions()
+                {
+                    HideCloseButton = true,
+                    DisableBackgroundCancel = true
+                };
 
-            var voteModal = Modal.Show<VotingModal>("Cast your vote!", options);
-            var modalResult = await voteModal.Result;
+                var voteModal = Modal.Show<VotingModal>("Cast your vote!", options);
+                var modalResult = await voteModal.Result;
 
-            await StoryPokerHub.VoteAsync((string)modalResult.Data);
+                await ScrumPokerHub.VoteAsync((string) modalResult.Data);
+            }
+            else
+            {
+                await ScrumPokerHub.VoteAsync("🕵");
+            }
+
             StateHasChanged();
         }
 
@@ -147,7 +175,7 @@ namespace ScrumPokerTool.Client.Pages
 
             var gameEndedModal = Modal.Show<GameEndedModal>("Game Complete", options);
             await gameEndedModal.Result;
-            await StoryPokerHub.StopAsync();
+            await ScrumPokerHub.StopAsync();
 
             NavigationManager.NavigateTo($"/");
         }
@@ -184,8 +212,8 @@ namespace ScrumPokerTool.Client.Pages
 
         public async ValueTask DisposeAsync()
         {
-            await StoryPokerHub.LeaveGameAsync()
-                .ContinueWith(t => StoryPokerHub.StopAsync());
+            await ScrumPokerHub.LeaveGameAsync()
+                .ContinueWith(t => ScrumPokerHub.StopAsync());
         }
     }
 }
