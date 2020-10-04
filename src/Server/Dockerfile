@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-buster AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["src/Server/ScrumPokerTool.Server.csproj", "src/Server/"]
 COPY ["src/Client/ScrumPokerTool.Client.csproj", "src/Client/"]
